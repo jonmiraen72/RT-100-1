@@ -3,7 +3,10 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Audio Player</title>
+<!-- 메신저 미리보기 카드 제목을 교재번호 MP3로 설정합니다 -->
+<meta property="og:title" content="MP3">
+<meta property="og:description" content="클릭하여 교재 음원을 재생하세요">
+<title>MP3</title>
 <style>
   body { font-family: 'Malgun Gothic', sans-serif; max-width: 650px; margin: 20px auto; padding: 0 15px; background: #f8f9fa; }
   h2 { color: #222; border-bottom: 2px solid #0066cc; padding-bottom: 8px; }
@@ -35,8 +38,15 @@ let currentTracks = [];
 let currentIndex = -1;
 const audio = document.getElementById("audioPlayer");
 
-document.title = `${REPO} Audio Player`;
+// 페이지 제목과 메신저 미리보기 제목을 "교재이름 MP3" 형식으로 자동 설정합니다.
+const pageTitle = `${REPO} MP3`;
+document.title = pageTitle;
 document.getElementById("title").innerText = `${REPO} 음원 목록`;
+
+let ogTitleMeta = document.querySelector('meta[property="og:title"]');
+if (ogTitleMeta) {
+  ogTitleMeta.setAttribute("content", pageTitle);
+}
 
 audio.addEventListener("ended", () => {
   if (currentIndex + 1 < currentTracks.length) {
@@ -53,7 +63,6 @@ async function loadFolders() {
     const items = await res.json();
     const folders = items.filter(item => item.type === "dir");
     
-    // 폴더 이름에서 첫 번째로 나오는 숫자만 정확하게 추출하여 오름차순 정렬합니다.
     folders.sort((a, b) => {
       const matchA = a.name.match(/(\d+)/);
       const matchB = b.name.match(/(\d+)/);
@@ -85,7 +94,6 @@ async function loadTracks(encodedPath, folderName) {
     const items = await res.json();
     currentTracks = items.filter(item => item.name.toLowerCase().endsWith(".mp3"));
     
-    // 트랙 파일들도 첫 번째 숫자를 기준으로 올바르게 정렬합니다.
     currentTracks.sort((a, b) => {
       const matchA = a.name.match(/(\d+)/);
       const matchB = b.name.match(/(\d+)/);
