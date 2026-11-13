@@ -53,7 +53,7 @@ async function loadFolders() {
     const items = await res.json();
     const folders = items.filter(item => item.type === "dir");
     
-    // 폴더 이름에 포함된 숫자를 추출하여 1, 2, 3... 자연스러운 오름차순으로 정렬합니다.
+    // 폴더 이름에서 숫자를 정확하게 추출하여 오름차순(1, 2, 3... 6, 7...)으로 정렬합니다.
     folders.sort((a, b) => {
       const numA = parseInt(a.name.replace(/[^0-9]/g, '')) || 0;
       const numB = parseInt(b.name.replace(/[^0-9]/g, '')) || 0;
@@ -82,7 +82,7 @@ async function loadTracks(encodedPath, folderName) {
     const items = await res.json();
     currentTracks = items.filter(item => item.name.toLowerCase().endsWith(".mp3"));
     
-    // 트랙 파일들도 숫자가 있다면 1, 2, 3 순으로 정렬합니다.
+    // 트랙 파일들도 숫자를 기준으로 올바르게 정렬합니다.
     currentTracks.sort((a, b) => {
       const numA = parseInt(a.name.replace(/[^0-9]/g, '')) || 0;
       const numB = parseInt(b.name.replace(/[^0-9]/g, '')) || 0;
